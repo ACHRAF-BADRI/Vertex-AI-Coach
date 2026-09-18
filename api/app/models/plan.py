@@ -32,6 +32,14 @@ def get_current_plan(user_id):
     )
 
 
+def delete_by_user(user_id):
+    _collection().delete_many({"user_id": ObjectId(user_id)})
+
+
+def delete_current(user_id):
+    _collection().delete_one({"user_id": ObjectId(user_id), "status": "active"})
+
+
 def to_public_dict(plan):
     return {
         "id": str(plan["_id"]),

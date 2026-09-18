@@ -1,6 +1,6 @@
-# AI-Running-Coach
+# Vertex AI Coach
 
-Application de suivi d'entraînement sportif intégrant des recommandations générées par IA (plans d'entraînement adaptatifs).
+Plateforme de coaching sportif intégrant des recommandations générées par IA : coach de gym (programme, nutrition, suppléments), suivi de course à pied (journal, plans d'entraînement adaptatifs) et compteur de pas.
 
 ## Structure du repo (monorepo)
 
@@ -14,7 +14,7 @@ AI-Running-Coach/
 
 ## Stack
 
-- **API** : Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), API Groq (Llama 3.3, tier gratuit) pour les plans adaptatifs
+- **API** : Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), API Groq (tier gratuit) pour les plans adaptatifs
 - **Web** : React + TypeScript (Vite), Tailwind CSS (responsive + dark mode), React Router, Recharts
 - **Base de données** : MongoDB Atlas
 - **Déploiement** : Render (api/) + Netlify (web/), CI/CD via push GitHub
@@ -41,8 +41,20 @@ npm install
 npm run dev
 ```
 
+### Créer un compte admin
+
+Aucun utilisateur n'est admin par défaut. Après avoir créé un compte via l'interface, promeus-le :
+
+```bash
+cd api
+python scripts/make_admin.py ton-email@exemple.com
+```
+
 ## Statut
 
 - Auth (inscription/connexion/JWT/rôles) : fait
-- Fondations frontend (routing, dark mode, contexte auth) : fait
-- Journal d'entraînement, plan IA, dashboard, admin : à venir
+- Journal d'entraînement (CRUD) : fait
+- Plan d'entraînement généré par IA (Groq) : fait
+- Dashboard (statistiques, graphiques) : fait
+- Administration (liste + gestion des rôles) : fait
+- Déploiement (Render/Netlify) : à venir

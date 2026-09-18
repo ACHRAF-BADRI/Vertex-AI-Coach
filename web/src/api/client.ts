@@ -11,3 +11,19 @@ apiClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const data = err.response?.data;
+    const status = err.response?.status;
+    if (data?.code === "account_suspended") {
+      window.dispatchEvent(new Event("auth:suspended"));
+    } else if ((status === 401 || status === 422) && typeof data?.msg === "string") {
+      // flask-jwt-extended's own error shape (expired/invalid/missing token) — distinct
+      // from our app's {"error": "..."} responses (e.g. wrong login password).
+      window.dispatchEvent(new Event("auth:expired"));
+    }
+    return Promise.reject(err);
+  },
+);

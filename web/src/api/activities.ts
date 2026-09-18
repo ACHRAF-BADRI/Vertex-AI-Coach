@@ -6,6 +6,8 @@ export interface Activity {
   distance_km: number;
   duration_min: number;
   pace: number | null;
+  calories: number | null;
+  steps: number | null;
   feeling: string | null;
   notes: string | null;
 }

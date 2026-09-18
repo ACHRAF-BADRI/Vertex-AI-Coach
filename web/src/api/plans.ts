@@ -26,4 +26,7 @@ export interface TrainingPlan {
 export const plansApi = {
   current: () => apiClient.get<TrainingPlan | null>("/plans/current").then((r) => r.data),
   generate: () => apiClient.post<TrainingPlan>("/plans/generate").then((r) => r.data),
+  remove: () => apiClient.delete("/plans/current"),
+  translate: (lang: "fr" | "en") =>
+    apiClient.post<TrainingPlan | null>("/plans/current/translate", { lang }).then((r) => r.data),
 };
