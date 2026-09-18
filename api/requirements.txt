@@ -4,5 +4,5 @@ flask-jwt-extended==4.6.0
 flask-bcrypt==1.0.1
 pymongo==4.8.0
 python-dotenv==1.0.1
-anthropic==0.34.2
+groq==1.7.0
 gunicorn==22.0.0

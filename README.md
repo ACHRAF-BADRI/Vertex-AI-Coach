@@ -14,7 +14,7 @@ AI-Running-Coach/
 
 ## Stack
 
-- **API** : Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), API Claude (Anthropic) pour les plans adaptatifs
+- **API** : Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), API Groq (Llama 3.3, tier gratuit) pour les plans adaptatifs
 - **Web** : React + TypeScript (Vite), Tailwind CSS (responsive + dark mode), React Router, Recharts
 - **Base de données** : MongoDB Atlas
 - **Déploiement** : Render (api/) + Netlify (web/), CI/CD via push GitHub
@@ -27,7 +27,7 @@ AI-Running-Coach/
 cd api
 python -m venv .venv
 .venv/Scripts/activate  # Windows
-cp .env.example .env    # puis renseigner MONGODB_URI, JWT_SECRET_KEY, ANTHROPIC_API_KEY
+cp .env.example .env    # puis renseigner MONGODB_URI, JWT_SECRET_KEY, GROQ_API_KEY
 pip install -r requirements.txt
 python run.py
 ```

@@ -23,9 +23,11 @@ def create_app(config_class=Config):
 
     from app.routes.activities import activities_bp
     from app.routes.auth import auth_bp
+    from app.routes.plans import plans_bp
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(activities_bp, url_prefix="/api/activities")
+    app.register_blueprint(plans_bp, url_prefix="/api/plans")
 
     @app.get("/api/health")
     def health():
