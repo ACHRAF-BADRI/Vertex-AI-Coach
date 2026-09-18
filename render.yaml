@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: ai-running-coach-backend
+    runtime: docker
+    rootDir: api
+    plan: free
+    envVars:
+      - key: MONGODB_URI
+        sync: false
