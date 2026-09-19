@@ -4,8 +4,10 @@ import {
   ClipboardList,
   Dumbbell,
   Footprints,
+  Inbox,
   Languages,
   LayoutDashboard,
+  Library,
   LogOut,
   MapPin,
   Menu,
@@ -45,6 +47,8 @@ export function Sidebar() {
       links: [
         { to: "/gym/profile", label: t("sidebar.gymProfileLink"), end: true, icon: UserCog },
         { to: "/gym/plan", label: t("sidebar.gymPlanLink"), end: true, icon: ClipboardList },
+        { to: "/gym/saved", label: t("sidebar.gymSavedLink"), end: true, icon: Library },
+        { to: "/gym/inbox", label: t("sidebar.gymInboxLink"), end: true, icon: Inbox },
       ],
     },
     {

@@ -7,8 +7,10 @@ import { Sidebar } from "./components/Sidebar";
 import { useAuth } from "./context/AuthContext";
 import { AdminUsers } from "./pages/AdminUsers";
 import { Dashboard } from "./pages/Dashboard";
+import { GymInbox } from "./pages/GymInbox";
 import { GymPlanView } from "./pages/GymPlanView";
 import { GymProfile } from "./pages/GymProfile";
+import { GymSavedPlans } from "./pages/GymSavedPlans";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { PlanView } from "./pages/PlanView";
@@ -154,6 +156,26 @@ function App() {
                 <ProtectedRoute>
                   <PageTransition>
                     <GymPlanView />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/gym/saved"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <GymSavedPlans />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/gym/inbox"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <GymInbox />
                   </PageTransition>
                 </ProtectedRoute>
               }

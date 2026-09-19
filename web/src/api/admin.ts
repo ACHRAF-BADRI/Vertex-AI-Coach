@@ -1,5 +1,6 @@
 import type { Activity } from "./activities";
 import { apiClient } from "./client";
+import type { GymPlan, GymProfile, SavedGymPlan } from "./gym";
 import type { StatsSummary } from "./stats";
 import type { User } from "../context/AuthContext";
 
@@ -17,6 +18,7 @@ export interface UserInput {
   role: "user" | "admin";
   goal?: string;
   status?: "active" | "suspended";
+  gym_saved_plan_limit?: number | null;
 }
 
 export interface ListUsersParams {
@@ -42,5 +44,10 @@ export const adminApi = {
   deleteUser: (id: string) => apiClient.delete(`/admin/users/${id}`),
   userActivities: (id: string) => apiClient.get<Activity[]>(`/admin/users/${id}/activities`).then((r) => r.data),
   userStats: (id: string) => apiClient.get<StatsSummary>(`/admin/users/${id}/stats`).then((r) => r.data),
+  userGymProfile: (id: string) =>
+    apiClient.get<GymProfile | null>(`/admin/users/${id}/gym/profile`).then((r) => r.data),
+  userGymPlan: (id: string) => apiClient.get<GymPlan | null>(`/admin/users/${id}/gym/plan`).then((r) => r.data),
+  userGymSavedPlans: (id: string) =>
+    apiClient.get<SavedGymPlan[]>(`/admin/users/${id}/gym/saved`).then((r) => r.data),
   stats: () => apiClient.get<AdminStats>("/admin/stats").then((r) => r.data),
 };

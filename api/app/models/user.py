@@ -15,6 +15,12 @@ def _collection():
 
 DEFAULT_WEIGHT_KG = 70
 DEFAULT_HEIGHT_CM = 170
+DEFAULT_GYM_SAVED_PLAN_LIMIT = 3
+
+
+def get_gym_saved_plan_limit(user):
+    limit = user.get("gym_saved_plan_limit")
+    return limit if isinstance(limit, int) and limit > 0 else DEFAULT_GYM_SAVED_PLAN_LIMIT
 
 def create_user(email, password, name, role="user", goal=None, weight_kg=None, height_cm=None):
     hashed = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -114,5 +120,6 @@ def to_public_dict(user):
         "goal": user.get("goal"),
         "weight_kg": user.get("weight_kg"),
         "height_cm": user.get("height_cm"),
+        "gym_saved_plan_limit": user.get("gym_saved_plan_limit"),
         "created_at": user["created_at"].isoformat() if user.get("created_at") else None,
     }

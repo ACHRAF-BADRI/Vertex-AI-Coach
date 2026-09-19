@@ -26,6 +26,7 @@ export function UserFormModal({ open, onClose, onSubmit, initial }: UserFormModa
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"user" | "admin">("user");
   const [goal, setGoal] = useState(GOALS[1]);
+  const [gymSavedPlanLimit, setGymSavedPlanLimit] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -35,13 +36,20 @@ export function UserFormModal({ open, onClose, onSubmit, initial }: UserFormModa
     setPassword("");
     setRole(initial?.role ?? "user");
     setGoal(initial?.goal ?? GOALS[1]);
+    setGymSavedPlanLimit(initial?.gym_saved_plan_limit ? String(initial.gym_saved_plan_limit) : "");
   }, [open, initial]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const input: UserInput = { name, email, role, goal };
+      const input: UserInput = {
+        name,
+        email,
+        role,
+        goal,
+        gym_saved_plan_limit: gymSavedPlanLimit ? Number(gymSavedPlanLimit) : null,
+      };
       if (!isEdit) input.password = password;
       await onSubmit(input);
       onClose();
@@ -107,6 +115,19 @@ export function UserFormModal({ open, onClose, onSubmit, initial }: UserFormModa
             <option value="user">{t("userFormModal.roleUser")}</option>
             <option value="admin">{t("userFormModal.roleAdmin")}</option>
           </select>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            {t("userFormModal.gymSavedPlanLimit")}
+          </label>
+          <input
+            type="number"
+            min={1}
+            placeholder={t("userFormModal.gymSavedPlanLimitPlaceholder")}
+            value={gymSavedPlanLimit}
+            onChange={(e) => setGymSavedPlanLimit(e.target.value)}
+            className={inputClass}
+          />
         </div>
         <div className="flex gap-2 pt-2">
           <button type="submit" disabled={submitting} className="btn-primary flex-1">

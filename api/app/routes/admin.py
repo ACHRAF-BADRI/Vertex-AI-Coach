@@ -4,6 +4,7 @@ from flask_jwt_extended import get_jwt_identity
 from app.models import activity as activity_model
 from app.models import gym_plan as gym_plan_model
 from app.models import gym_profile as gym_profile_model
+from app.models import gym_share as gym_share_model
 from app.models import plan as plan_model
 from app.models import user as user_model
 from app.routes.stats import summary_for_user
@@ -110,6 +111,19 @@ def update_user(user_id):
             return jsonify({"error": "impossible de suspendre ton propre compte"}), 400
         updates["status"] = status
 
+    if "gym_saved_plan_limit" in data:
+        raw_limit = data["gym_saved_plan_limit"]
+        if raw_limit is None:
+            updates["gym_saved_plan_limit"] = None
+        else:
+            try:
+                limit = int(raw_limit)
+            except (TypeError, ValueError):
+                return jsonify({"error": "limite de sauvegardes invalide"}), 400
+            if limit < 1:
+                return jsonify({"error": "limite de sauvegardes invalide"}), 400
+            updates["gym_saved_plan_limit"] = limit
+
     if not updates:
         return jsonify({"error": "aucune modification fournie"}), 400
 
@@ -130,6 +144,7 @@ def delete_user(user_id):
     plan_model.delete_by_user(user_id)
     gym_plan_model.delete_by_user(user_id)
     gym_profile_model.delete_by_user(user_id)
+    gym_share_model.delete_by_user(user_id)
     user_model.delete_user(user_id)
     return "", 204
 
@@ -149,3 +164,34 @@ def user_stats(user_id):
     if not user_model.find_by_id(user_id):
         return jsonify({"error": "utilisateur introuvable"}), 404
     return jsonify(summary_for_user(user_id))
+
+
+@admin_bp.get("/users/<user_id>/gym/profile")
+@role_required("admin")
+def user_gym_profile(user_id):
+    if not user_model.find_by_id(user_id):
+        return jsonify({"error": "utilisateur introuvable"}), 404
+    profile = gym_profile_model.get_profile(user_id)
+    if not profile:
+        return jsonify(None)
+    return jsonify(gym_profile_model.to_public_dict(profile))
+
+
+@admin_bp.get("/users/<user_id>/gym/plan")
+@role_required("admin")
+def user_gym_plan(user_id):
+    if not user_model.find_by_id(user_id):
+        return jsonify({"error": "utilisateur introuvable"}), 404
+    plan = gym_plan_model.get_current_plan(user_id)
+    if not plan:
+        return jsonify(None)
+    return jsonify(gym_plan_model.to_public_dict(plan))
+
+
+@admin_bp.get("/users/<user_id>/gym/saved")
+@role_required("admin")
+def user_gym_saved_plans(user_id):
+    if not user_model.find_by_id(user_id):
+        return jsonify({"error": "utilisateur introuvable"}), 404
+    plans = gym_plan_model.list_saved_plans(user_id)
+    return jsonify([gym_plan_model.to_saved_public_dict(p) for p in plans])

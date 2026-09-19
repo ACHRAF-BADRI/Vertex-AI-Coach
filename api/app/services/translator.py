@@ -38,6 +38,10 @@ def translate_json(data, target_lang):
 
     text = completion.choices[0].message.content
     try:
-        return json.loads(text)
+        result = json.loads(text)
     except json.JSONDecodeError as exc:
         raise ValueError("Réponse IA invalide (JSON attendu)") from exc
+
+    if not isinstance(result, dict):
+        raise ValueError("Réponse IA invalide (objet JSON attendu)")
+    return result

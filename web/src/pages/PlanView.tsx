@@ -16,6 +16,7 @@ export function PlanView() {
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [confirmRegenerateOpen, setConfirmRegenerateOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,12 +36,17 @@ export function PlanView() {
     if (!plan) return;
     const request =
       i18n.language === "en" ? plansApi.translate("en") : plansApi.current();
-    request.then((translated) => {
-      if (translated) setPlan(translated);
-    });
+    request
+      .then((translated) => {
+        if (translated) setPlan(translated);
+      })
+      .catch((err: any) => {
+        toast.error(err.response?.data?.error ?? t("planView.translateErrorDefault"));
+      });
   }, [i18n.language]);
 
   const handleGenerate = async () => {
+    setConfirmRegenerateOpen(false);
     setGenerating(true);
     setError(null);
     try {
@@ -52,6 +58,14 @@ export function PlanView() {
       toast.error(message);
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleGenerateClick = () => {
+    if (plan) {
+      setConfirmRegenerateOpen(true);
+    } else {
+      handleGenerate();
     }
   };
 
@@ -74,7 +88,7 @@ export function PlanView() {
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-bold tracking-tight">{t("planView.title")}</h1>
         <div className="flex items-center gap-2 mr-20">
-          <button onClick={handleGenerate} disabled={generating} className="btn-primary">
+          <button onClick={handleGenerateClick} disabled={generating} className="btn-primary">
             {generating ? (
               <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
             ) : plan ? (
@@ -164,6 +178,16 @@ export function PlanView() {
         confirmLabel={t("common.delete")}
         onConfirm={confirmDelete}
         onCancel={() => setConfirmDeleteOpen(false)}
+      />
+
+      <ConfirmDialog
+        open={confirmRegenerateOpen}
+        variant="default"
+        title={t("planView.confirmRegenerateTitle")}
+        description={t("planView.confirmRegenerateDescription")}
+        confirmLabel={t("planView.regenerate")}
+        onConfirm={handleGenerate}
+        onCancel={() => setConfirmRegenerateOpen(false)}
       />
     </div>
   );

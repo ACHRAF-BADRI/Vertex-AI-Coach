@@ -13,6 +13,7 @@ export interface User {
   goal: string | null;
   weight_kg?: number | null;
   height_cm?: number | null;
+  gym_saved_plan_limit?: number | null;
   created_at?: string | null;
 }
 
