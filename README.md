@@ -42,6 +42,12 @@ AI-Running-Coach/
 
 ## Tech stack
 
+<p align="center">
+  <img src="imgs/flask_img.jpg" alt="Flask" height="80" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="imgs/react_img.png" alt="React" height="80" />
+</p>
+
 - **API**: Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), Groq API (free tier) for AI generation
 - **Web**: React + TypeScript (Vite), Tailwind CSS, React Router, Recharts, Framer Motion, react-i18next
 - **Database**: MongoDB Atlas
