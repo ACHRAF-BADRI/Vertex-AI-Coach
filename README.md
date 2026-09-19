@@ -1,25 +1,53 @@
 # Vertex AI Coach
 
-Plateforme de coaching sportif intégrant des recommandations générées par IA : coach de gym (programme, nutrition, suppléments), suivi de course à pied (journal, plans d'entraînement adaptatifs) et compteur de pas.
+An AI-powered fitness coaching platform: a gym coach (workout program, nutrition, supplements), a running coach (training log, adaptive training plans) and a GPS step counter.
 
-## Structure du repo (monorepo)
+**Live demo: [https://vertex-coach.netlify.app](https://vertex-coach.netlify.app)**
+
+> The API runs on Render's free tier, which sleeps after 15 minutes of inactivity. The first request after a pause can take about a minute.
+
+## Features
+
+**Gym coach**
+- AI-generated weekly program (workout split, nutrition, supplements) based on your goal, level and equipment, with an estimate of the time needed to see results
+- Exercise images (wger.de) with a zoomable viewer, plus a YouTube video link per exercise
+- Swap any exercise or supplement for an AI-suggested alternative; suggested supplement brands
+- Save programs under a name (3 slots by default, adjustable per user by an admin) and browse them on a dedicated page
+- Send a program to another user by email; recipients accept or decline it from an inbox and choose which saved program to replace when their slots are full
+
+**Running coach**
+- Training log (CRUD) with derived calories and estimated steps
+- AI-generated adaptive training plans
+- Dashboard with weekly volume and pace charts
+
+**GPS step counter**
+- Live tracking (start, pause, resume, finish) with distance from GPS, estimated steps and calories, and a route preview
+- Session history and a dashboard with daily and weekly charts
+
+**Platform**
+- JWT authentication with user and admin roles, account suspension, self-service profile editing
+- Admin panel: user management, statistics, and per-user views of running, gym and step data
+- French / English interface, with AI-generated content translated on the fly
+- Responsive layout, dark mode
+
+## Repository structure (monorepo)
 
 ```
 AI-Running-Coach/
-├── api/         # API Flask — auth, journal d'entraînement, plans IA
-├── web/         # Application React + TypeScript
-├── render.yaml  # Blueprint de déploiement de l'API sur Render
-└── netlify.toml # Configuration de build/déploiement du frontend sur Netlify
+├── api/         # Flask API: auth, activities, AI plans, gym coach, steps, admin
+├── web/         # React + TypeScript application
+├── render.yaml  # Render blueprint for the API
+└── netlify.toml # Netlify build configuration for the frontend
 ```
 
-## Stack
+## Tech stack
 
-- **API** : Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), API Groq (tier gratuit) pour les plans adaptatifs
-- **Web** : React + TypeScript (Vite), Tailwind CSS (responsive + dark mode), React Router, Recharts
-- **Base de données** : MongoDB Atlas
-- **Déploiement** : Render (api/) + Netlify (web/), CI/CD via push GitHub
+- **API**: Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), Groq API (free tier) for AI generation
+- **Web**: React + TypeScript (Vite), Tailwind CSS, React Router, Recharts, Framer Motion, react-i18next
+- **Database**: MongoDB Atlas
+- **Deployment**: Render (`api/`, Docker + gunicorn) and Netlify (`web/`), continuous deployment on GitHub push
 
-## Démarrage local
+## Running locally
 
 ### API
 
@@ -27,7 +55,7 @@ AI-Running-Coach/
 cd api
 python -m venv .venv
 .venv/Scripts/activate  # Windows
-cp .env.example .env    # puis renseigner MONGODB_URI, JWT_SECRET_KEY, GROQ_API_KEY
+cp .env.example .env    # then fill in MONGODB_URI, JWT_SECRET_KEY, GROQ_API_KEY
 pip install -r requirements.txt
 python run.py
 ```
@@ -41,20 +69,17 @@ npm install
 npm run dev
 ```
 
-### Créer un compte admin
+### Creating an admin account
 
-Aucun utilisateur n'est admin par défaut. Après avoir créé un compte via l'interface, promeus-le :
+No user is an admin by default. After creating an account through the interface, promote it:
 
 ```bash
 cd api
-python scripts/make_admin.py ton-email@exemple.com
+python scripts/make_admin.py your-email@example.com
 ```
 
-## Statut
+## Deployment
 
-- Auth (inscription/connexion/JWT/rôles) : fait
-- Journal d'entraînement (CRUD) : fait
-- Plan d'entraînement généré par IA (Groq) : fait
-- Dashboard (statistiques, graphiques) : fait
-- Administration (liste + gestion des rôles) : fait
-- Déploiement (Render/Netlify) : à venir
+- **API (Render)**: create a Blueprint from this repository (it reads `render.yaml`) and set `MONGODB_URI`, `JWT_SECRET_KEY`, `GROQ_API_KEY` and `CORS_ORIGINS` (the frontend URL, without a trailing slash).
+- **Web (Netlify)**: import the repository (it reads `netlify.toml`) and set `VITE_API_URL` to the API URL followed by `/api`. This value is baked in at build time, so redeploy after changing it.
+- MongoDB Atlas must allow connections from Render (Network Access).
