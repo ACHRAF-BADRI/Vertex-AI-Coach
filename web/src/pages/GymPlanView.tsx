@@ -27,6 +27,7 @@ import { Badge } from "../components/Badge";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { EmptyState } from "../components/EmptyState";
 import { ExerciseThumbnail, ImageLightbox } from "../components/ExerciseMedia";
+import { GeneratingOverlay } from "../components/GeneratingOverlay";
 import { Modal } from "../components/Modal";
 import { SendPlanModal } from "../components/SendPlanModal";
 import { getMealIcon } from "../utils/mealIcon";
@@ -689,6 +690,8 @@ export function GymPlanView() {
           )}
         </div>
       )}
+
+      <GeneratingOverlay open={generating} title={t("gymPlanView.generating")} icon={Dumbbell} />
 
       <ConfirmDialog
         open={confirmDeleteOpen}

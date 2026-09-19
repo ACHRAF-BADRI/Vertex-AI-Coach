@@ -72,6 +72,14 @@ def generate_plan(user, activities):
 
     text = completion.choices[0].message.content
     try:
-        return json.loads(text)
+        data = json.loads(text)
     except json.JSONDecodeError as exc:
         raise ValueError("Réponse IA invalide (JSON attendu)") from exc
+
+    weeks = data.get("weeks") if isinstance(data, dict) else None
+    if not isinstance(weeks, list) or not weeks:
+        raise ValueError("Réponse IA invalide (plan incomplet), réessaie")
+    for week in weeks:
+        if not isinstance(week, dict) or not isinstance(week.get("sessions"), list):
+            raise ValueError("Réponse IA invalide (plan incomplet), réessaie")
+    return data

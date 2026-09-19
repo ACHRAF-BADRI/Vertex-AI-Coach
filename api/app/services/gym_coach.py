@@ -109,8 +109,27 @@ def _build_user_prompt(profile):
     )
 
 
+def _validate_gym_plan(data):
+    split = data.get("workout_split")
+    nutrition = data.get("nutrition")
+    supplements = data.get("supplements")
+    valid = (
+        isinstance(split, list)
+        and split
+        and all(isinstance(d, dict) and isinstance(d.get("exercises"), list) for d in split)
+        and isinstance(nutrition, dict)
+        and isinstance(nutrition.get("macros"), dict)
+        and isinstance(nutrition.get("meal_suggestions"), list)
+        and isinstance(supplements, list)
+    )
+    if not valid:
+        raise ValueError("Réponse IA invalide (programme incomplet), réessaie")
+    return data
+
+
 def generate_plan(profile):
-    return _call_json(SYSTEM_PROMPT, _build_user_prompt(profile), max_tokens=4000)
+    data = _call_json(SYSTEM_PROMPT, _build_user_prompt(profile), max_tokens=4000)
+    return _validate_gym_plan(data)
 
 
 ALTERNATIVES_SYSTEM_PROMPT = """Tu es un coach de musculation expert. On te donne un exercice et \

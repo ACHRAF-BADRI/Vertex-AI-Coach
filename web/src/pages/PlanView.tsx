@@ -8,6 +8,7 @@ import { Alert } from "../components/Alert";
 import { Badge } from "../components/Badge";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { EmptyState } from "../components/EmptyState";
+import { GeneratingOverlay } from "../components/GeneratingOverlay";
 
 export function PlanView() {
   const { t, i18n } = useTranslation();
@@ -135,7 +136,7 @@ export function PlanView() {
               })}
             </span>
           </div>
-          {plan.weeks.map((week, weekIndex) => (
+          {(plan.weeks ?? []).map((week, weekIndex) => (
             <motion.div
               key={week.week_number}
               initial={{ opacity: 0, y: 12 }}
@@ -150,7 +151,7 @@ export function PlanView() {
                 <h2 className="text-lg font-semibold">{week.focus}</h2>
               </div>
               <div className="flex flex-col gap-2">
-                {week.sessions.map((session, i) => (
+                {(week.sessions ?? []).map((session, i) => (
                   <div
                     key={i}
                     className="rounded-xl bg-gray-50 p-3 text-sm transition-colors hover:bg-gray-100 dark:bg-gray-950/60 dark:hover:bg-gray-800/60"
@@ -170,6 +171,8 @@ export function PlanView() {
           ))}
         </div>
       )}
+
+      <GeneratingOverlay open={generating} title={t("planView.generating")} icon={Sparkles} />
 
       <ConfirmDialog
         open={confirmDeleteOpen}

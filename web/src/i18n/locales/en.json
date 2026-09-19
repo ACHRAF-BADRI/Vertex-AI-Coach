@@ -14,7 +14,8 @@
     "admin": "Admin",
     "user": "User",
     "irreversible": "This action cannot be undone.",
-    "genericError": "Something went wrong"
+    "genericError": "Something went wrong",
+    "generatingHint": "The AI is preparing your plan, this can take up to a minute."
   },
   "sidebar": {
     "appName": "Vertex AI Coach",

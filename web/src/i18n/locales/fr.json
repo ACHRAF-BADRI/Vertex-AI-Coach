@@ -14,7 +14,8 @@
     "admin": "Admin",
     "user": "Utilisateur",
     "irreversible": "Cette action est irréversible.",
-    "genericError": "Une erreur est survenue"
+    "genericError": "Une erreur est survenue",
+    "generatingHint": "L'IA prépare ton plan, cela peut prendre jusqu'à une minute."
   },
   "sidebar": {
     "appName": "Vertex AI Coach",
