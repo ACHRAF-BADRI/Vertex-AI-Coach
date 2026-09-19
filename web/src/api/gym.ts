@@ -134,5 +134,6 @@ export const gymApi = {
   listInbox: () => apiClient.get<SharedGymPlan[]>("/gym/inbox").then((r) => r.data),
   acceptShare: (id: string, replaceId?: string) =>
     apiClient.post<SendPlanResult>(`/gym/inbox/${id}/accept`, { replace_id: replaceId }).then((r) => r.data),
+  inboxCount: () => apiClient.get<{ count: number }>("/gym/inbox/count").then((r) => r.data.count),
   declineShare: (id: string) => apiClient.delete(`/gym/inbox/${id}`),
 };

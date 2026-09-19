@@ -261,6 +261,12 @@ def list_inbox():
     return jsonify([gym_share_model.to_public_dict(s) for s in shares])
 
 
+@gym_bp.get("/inbox/count")
+@active_required
+def inbox_count():
+    return jsonify({"count": gym_share_model.count_inbox(get_jwt_identity())})
+
+
 @gym_bp.post("/inbox/<share_id>/accept")
 @active_required
 def accept_share(share_id):

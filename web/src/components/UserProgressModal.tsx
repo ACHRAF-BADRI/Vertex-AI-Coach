@@ -1,10 +1,11 @@
-import { Dumbbell, Footprints } from "lucide-react";
+import { Dumbbell, Footprints, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { adminApi } from "../api/admin";
 import type { Activity } from "../api/activities";
 import type { GymPlan, GymProfile, SavedGymPlan } from "../api/gym";
 import type { StatsSummary } from "../api/stats";
+import type { StepSession } from "../api/steps";
 import type { User } from "../context/AuthContext";
 import { formatPace } from "../utils/format";
 import { FEELING_ICON } from "../utils/feeling";
@@ -18,7 +19,7 @@ interface UserProgressModalProps {
   user: User | null;
 }
 
-type ProgressTab = "running" | "gym";
+type ProgressTab = "running" | "gym" | "steps";
 
 export function UserProgressModal({ open, onClose, user }: UserProgressModalProps) {
   const { t, i18n } = useTranslation();
@@ -28,6 +29,7 @@ export function UserProgressModal({ open, onClose, user }: UserProgressModalProp
   const [gymProfile, setGymProfile] = useState<GymProfile | null>(null);
   const [gymPlan, setGymPlan] = useState<GymPlan | null>(null);
   const [gymSaved, setGymSaved] = useState<SavedGymPlan[]>([]);
+  const [stepSessions, setStepSessions] = useState<StepSession[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,13 +42,15 @@ export function UserProgressModal({ open, onClose, user }: UserProgressModalProp
       adminApi.userGymProfile(user.id),
       adminApi.userGymPlan(user.id),
       adminApi.userGymSavedPlans(user.id),
+      adminApi.userStepSessions(user.id),
     ])
-      .then(([s, a, gymProfileRes, gymPlanRes, gymSavedRes]) => {
+      .then(([s, a, gymProfileRes, gymPlanRes, gymSavedRes, stepsRes]) => {
         setStats(s);
         setActivities(a);
         setGymProfile(gymProfileRes);
         setGymPlan(gymPlanRes);
         setGymSaved(gymSavedRes);
+        setStepSessions(stepsRes);
       })
       .finally(() => setLoading(false));
   }, [open, user]);
@@ -77,6 +81,10 @@ export function UserProgressModal({ open, onClose, user }: UserProgressModalProp
             <button onClick={() => setTab("gym")} className={tabClass(tab === "gym")}>
               <Dumbbell size={13} />
               {t("sidebar.gym")}
+            </button>
+            <button onClick={() => setTab("steps")} className={tabClass(tab === "steps")}>
+              <MapPin size={13} />
+              {t("sidebar.steps")}
             </button>
           </div>
 
@@ -183,6 +191,55 @@ export function UserProgressModal({ open, onClose, user }: UserProgressModalProp
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {tab === "steps" && (
+            <div className="flex flex-col gap-5">
+              {stepSessions.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t("userProgressModal.noStepSessions")}</p>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <StatTile
+                      label={t("stepsDashboard.totalSteps")}
+                      value={stepSessions
+                        .reduce((sum, x) => sum + x.steps, 0)
+                        .toLocaleString(i18n.language === "en" ? "en-US" : "fr-FR")}
+                    />
+                    <StatTile
+                      label={t("stepsDashboard.totalDistance")}
+                      value={`${stepSessions.reduce((sum, x) => sum + x.distance_km, 0).toFixed(1)} km`}
+                    />
+                    <StatTile
+                      label={t("stepsDashboard.totalCalories")}
+                      value={`${stepSessions.reduce((sum, x) => sum + x.calories, 0)} kcal`}
+                    />
+                    <StatTile label={t("stepsDashboard.sessions")} value={String(stepSessions.length)} />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      {t("userProgressModal.recentStepSessions")}
+                    </h3>
+                    <div className="flex max-h-64 flex-col gap-2 overflow-y-auto pr-1">
+                      {stepSessions.map((x) => (
+                        <div
+                          key={x.id}
+                          className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-gray-50 px-3 py-2 text-sm dark:bg-gray-950/60"
+                        >
+                          <span className="min-w-0 break-words">
+                            {new Date(x.started_at).toLocaleDateString(i18n.language === "en" ? "en-US" : "fr-FR")} —{" "}
+                            {x.distance_km.toFixed(2)} km · {Math.round(x.duration_sec / 60)} min
+                          </span>
+                          <Badge variant="gray">
+                            {x.steps.toLocaleString(i18n.language === "en" ? "en-US" : "fr-FR")} {t("trainingLog.stepsUnit")}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

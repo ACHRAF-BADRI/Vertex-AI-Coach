@@ -27,6 +27,7 @@ def create_app(config_class=Config):
     from app.routes.gym import gym_bp
     from app.routes.plans import plans_bp
     from app.routes.stats import stats_bp
+    from app.routes.steps import steps_bp
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(activities_bp, url_prefix="/api/activities")
@@ -34,6 +35,7 @@ def create_app(config_class=Config):
     app.register_blueprint(stats_bp, url_prefix="/api/stats")
     app.register_blueprint(admin_bp, url_prefix="/api/admin")
     app.register_blueprint(gym_bp, url_prefix="/api/gym")
+    app.register_blueprint(steps_bp, url_prefix="/api/steps")
 
     @app.get("/api/health")
     def health():

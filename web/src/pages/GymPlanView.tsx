@@ -5,7 +5,7 @@ import {
   CirclePlay,
   Dumbbell,
   Flame,
-  Library,
+  FolderOpen,
   PersonStanding,
   Pill,
   RefreshCw,
@@ -438,7 +438,7 @@ export function GymPlanView() {
             title={t("gymPlanView.viewSaved")}
             className="btn-icon"
           >
-            <Library size={16} />
+            <FolderOpen size={16} />
           </Link>
           <button onClick={handleGenerateClick} disabled={generating} className="btn-primary">
             {generating ? (

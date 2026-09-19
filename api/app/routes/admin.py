@@ -6,6 +6,7 @@ from app.models import gym_plan as gym_plan_model
 from app.models import gym_profile as gym_profile_model
 from app.models import gym_share as gym_share_model
 from app.models import plan as plan_model
+from app.models import step_session as step_session_model
 from app.models import user as user_model
 from app.routes.stats import summary_for_user
 from app.utils.decorators import role_required
@@ -145,6 +146,7 @@ def delete_user(user_id):
     gym_plan_model.delete_by_user(user_id)
     gym_profile_model.delete_by_user(user_id)
     gym_share_model.delete_by_user(user_id)
+    step_session_model.delete_by_user(user_id)
     user_model.delete_user(user_id)
     return "", 204
 
@@ -164,6 +166,15 @@ def user_stats(user_id):
     if not user_model.find_by_id(user_id):
         return jsonify({"error": "utilisateur introuvable"}), 404
     return jsonify(summary_for_user(user_id))
+
+
+@admin_bp.get("/users/<user_id>/steps")
+@role_required("admin")
+def user_step_sessions(user_id):
+    if not user_model.find_by_id(user_id):
+        return jsonify({"error": "utilisateur introuvable"}), 404
+    sessions = step_session_model.list_by_user(user_id)
+    return jsonify([step_session_model.to_public_dict(s) for s in sessions])
 
 
 @admin_bp.get("/users/<user_id>/gym/profile")

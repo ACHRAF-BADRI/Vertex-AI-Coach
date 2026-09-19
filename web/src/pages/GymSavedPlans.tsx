@@ -1,4 +1,4 @@
-import { Archive, ChevronDown, Flame, Pill, Send, Tag, Trash2 } from "lucide-react";
+import { Archive, ChevronDown, CirclePlay, Dumbbell, Flame, Pill, Send, Tag, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,15 @@ import { SendPlanModal } from "../components/SendPlanModal";
 import { useAuth } from "../context/AuthContext";
 import { getMealIcon } from "../utils/mealIcon";
 
+const SAVED_TABS = [
+  { key: "workout", labelKey: "gymPlanView.tabWorkout", icon: Dumbbell },
+  { key: "nutrition", labelKey: "gymPlanView.tabNutrition", icon: Flame },
+  { key: "supplements", labelKey: "gymPlanView.tabSupplements", icon: Pill },
+] as const;
+
 export function GymSavedPlans() {
   const { t, i18n } = useTranslation();
+  const [savedTab, setSavedTab] = useState<(typeof SAVED_TABS)[number]["key"]>("workout");
   const { user } = useAuth();
   const navigate = useNavigate();
   const [plans, setPlans] = useState<SavedGymPlan[]>([]);
@@ -126,7 +133,58 @@ export function GymSavedPlans() {
 
               {isExpanded && (
                 <div className="flex flex-col gap-4 border-t border-gray-100 p-4 dark:border-gray-800">
-                  {plan.workout_split.map((day, dayIndex) => (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex w-fit max-w-full gap-1 overflow-x-auto rounded-full bg-gray-100 p-1 dark:bg-gray-800">
+                      {SAVED_TABS.map((tab) => {
+                        const TabIcon = tab.icon;
+                        const isActive = savedTab === tab.key;
+                        return (
+                          <button
+                            key={tab.key}
+                            onClick={() => setSavedTab(tab.key)}
+                            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                              isActive
+                                ? "bg-white text-blue-600 shadow-sm dark:bg-gray-900 dark:text-blue-400"
+                                : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                            }`}
+                          >
+                            <TabIcon size={13} />
+                            {t(tab.labelKey)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleActivate(plan)}
+                        disabled={activatingId === plan.id}
+                        className="btn-primary !px-3 !py-1.5 !text-xs disabled:pointer-events-none disabled:opacity-60"
+                      >
+                        {activatingId === plan.id && (
+                          <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                        )}
+                        {t("gymSavedPlans.activate")}
+                      </button>
+                      <button
+                        onClick={() => setSendTarget(plan)}
+                        aria-label={t("gymPlanView.sendButton")}
+                        title={t("gymPlanView.sendButton")}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-blue-600/10 text-blue-600 transition-colors hover:bg-blue-600/15 dark:bg-blue-500/15 dark:text-blue-400 dark:hover:bg-blue-500/20"
+                      >
+                        <Send size={14} />
+                      </button>
+                      <button
+                        onClick={() => setDeleteTarget(plan)}
+                        aria-label={t("common.delete")}
+                        className="grid h-8 w-8 place-items-center rounded-full bg-red-50 text-red-600 transition-colors hover:bg-red-100 dark:bg-red-950/50 dark:text-red-400 dark:hover:bg-red-950"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {savedTab === "workout" &&
+                  plan.workout_split.map((day, dayIndex) => (
                     <div key={dayIndex}>
                       <h3 className="mb-2 text-sm font-semibold">
                         {day.day} — {day.focus}
@@ -155,6 +213,17 @@ export function GymSavedPlans() {
                               {exercise.equipment && (
                                 <p className="text-gray-500 dark:text-gray-400">{exercise.equipment}</p>
                               )}
+                              {exercise.video_url && (
+                                <a
+                                  href={exercise.video_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-red-600 hover:underline dark:text-red-400"
+                                >
+                                  <CirclePlay size={13} />
+                                  {t("gymPlanView.watchVideo")}
+                                </a>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -162,11 +231,8 @@ export function GymSavedPlans() {
                     </div>
                   ))}
 
+                  {savedTab === "nutrition" && (
                   <div>
-                    <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                      <Flame size={14} className="text-blue-600 dark:text-blue-400" />
-                      {t("gymPlanView.nutritionTitle")}
-                    </h3>
                     <div className="mb-2 flex flex-wrap gap-2">
                       <Badge variant="blue">
                         {plan.nutrition.daily_calories} {t("gymPlanView.perDay")}
@@ -198,12 +264,10 @@ export function GymSavedPlans() {
                       })}
                     </div>
                   </div>
+                  )}
 
+                  {savedTab === "supplements" && (
                   <div>
-                    <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                      <Pill size={14} className="text-blue-600 dark:text-blue-400" />
-                      {t("gymPlanView.supplementsTitle")}
-                    </h3>
                     <div className="flex flex-col gap-2">
                       {plan.supplements.map((supplement, i) => (
                         <div key={i} className="rounded-xl bg-gray-50 p-3 text-sm dark:bg-gray-950/60">
@@ -227,34 +291,8 @@ export function GymSavedPlans() {
                       <Alert variant="info">{t("gymPlanView.disclaimer")}</Alert>
                     </div>
                   </div>
+                  )}
 
-                  <div className="flex gap-2 pt-2">
-                    <button
-                      onClick={() => handleActivate(plan)}
-                      disabled={activatingId === plan.id}
-                      className="btn-primary !px-3 !py-1.5 !text-xs disabled:pointer-events-none disabled:opacity-60"
-                    >
-                      {activatingId === plan.id && (
-                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                      )}
-                      {t("gymSavedPlans.activate")}
-                    </button>
-                    <button
-                      onClick={() => setSendTarget(plan)}
-                      aria-label={t("gymPlanView.sendButton")}
-                      title={t("gymPlanView.sendButton")}
-                      className="grid h-8 w-8 place-items-center rounded-full bg-blue-600/10 text-blue-600 transition-colors hover:bg-blue-600/15 dark:bg-blue-500/15 dark:text-blue-400 dark:hover:bg-blue-500/20"
-                    >
-                      <Send size={14} />
-                    </button>
-                    <button
-                      onClick={() => setDeleteTarget(plan)}
-                      aria-label={t("common.delete")}
-                      className="grid h-8 w-8 place-items-center rounded-full bg-red-50 text-red-600 transition-colors hover:bg-red-100 dark:bg-red-950/50 dark:text-red-400 dark:hover:bg-red-950"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
                 </div>
               )}
             </div>

@@ -16,7 +16,8 @@ import { Login } from "./pages/Login";
 import { PlanView } from "./pages/PlanView";
 import { Profile } from "./pages/Profile";
 import { Register } from "./pages/Register";
-import { StepsComingSoon } from "./pages/StepsComingSoon";
+import { StepsDashboard } from "./pages/StepsDashboard";
+import { StepsTracker } from "./pages/StepsTracker";
 import { Suspended } from "./pages/Suspended";
 import { TrainingLog } from "./pages/TrainingLog";
 
@@ -135,7 +136,17 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PageTransition>
-                    <StepsComingSoon />
+                    <StepsTracker />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/steps/dashboard"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <StepsDashboard />
                   </PageTransition>
                 </ProtectedRoute>
               }

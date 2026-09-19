@@ -37,7 +37,8 @@
     "openMenu": "Open menu",
     "openSidebar": "Open sidebar",
     "collapseSidebar": "Collapse sidebar",
-    "theme": "Theme"
+    "theme": "Theme",
+    "stepsDashboardLink": "Dashboard"
   },
   "auth": {
     "email": "Email",
@@ -77,7 +78,7 @@
   "home": {
     "subtitle": "Choose a space to get started.",
     "gymDescription": "AI-generated workout program, nutrition and supplements tailored to your goal.",
-    "stepsDescription": "GPS tracking of your steps and routes (coming soon).",
+    "stepsDescription": "Live GPS tracking of your routes, with distance, duration and estimated steps.",
     "runningDescription": "Dashboard, training log and AI plans for running."
   },
   "dashboard": {
@@ -263,11 +264,6 @@
     "declinedToast": "Message declined",
     "conflictTitle": "Saved programs limit reached"
   },
-  "stepsComingSoon": {
-    "title": "Step counter",
-    "comingSoonTitle": "Coming soon",
-    "description": "Live GPS tracking (position, distance and steps in real time) is coming in a future update."
-  },
   "adminUsers": {
     "title": "Administration",
     "newUser": "New user",
@@ -357,7 +353,9 @@
     "daysCount_one": "{{count}} day",
     "daysCount_other": "{{count}} days",
     "savedGymPlans_one": "{{count}} saved program",
-    "savedGymPlans_other": "{{count}} saved programs"
+    "savedGymPlans_other": "{{count}} saved programs",
+    "noStepSessions": "No GPS sessions recorded.",
+    "recentStepSessions": "Recent sessions"
   },
   "adminStats": {
     "statUsers": "Users",
@@ -370,5 +368,48 @@
     "tooltipSignups": "Signups",
     "legendUsers": "Users",
     "legendAdmins": "Admins"
+  },
+  "stepsTracker": {
+    "title": "Step counter",
+    "distance": "Distance",
+    "duration": "Duration",
+    "steps": "Estimated steps",
+    "speed": "Speed",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "stop": "Finish",
+    "hint": "Tracking uses your device's GPS: keep this page open and the screen on. Steps are estimated from distance and your height.",
+    "waitingGps": "Looking for a GPS signal...",
+    "permissionDenied": "Allow location access in your browser to use tracking.",
+    "gpsError": "Unable to get your GPS position.",
+    "unsupported": "Geolocation isn't available on this device.",
+    "tooShort": "Session too short to be saved.",
+    "savedToast": "Session saved",
+    "deletedToast": "Session deleted",
+    "loadError": "Unable to load history",
+    "history": "History",
+    "totalSteps": "{{count}} steps in total",
+    "emptyTitle": "No sessions",
+    "emptyDescription": "Start tracking to see your route and steps here.",
+    "confirmDeleteTitle": "Delete this session?"
+  },
+  "stepsDashboard": {
+    "title": "Steps dashboard",
+    "startTracking": "New session",
+    "loadError": "Unable to load statistics",
+    "emptyTitle": "No data yet",
+    "emptyDescription": "Record a first GPS session to see your statistics here.",
+    "totalSteps": "Estimated steps",
+    "totalDistance": "Total distance",
+    "totalCalories": "Calories burned",
+    "totalTime": "Total time",
+    "sessions": "Sessions",
+    "avgSteps": "Steps per session (average)",
+    "bestSession": "Longest session",
+    "dailyChart": "Steps per day (last 14 days)",
+    "weeklyChart": "Distance per week (last 8 weeks)",
+    "stepsLabel": "Steps",
+    "distanceLabel": "Distance"
   }
 }

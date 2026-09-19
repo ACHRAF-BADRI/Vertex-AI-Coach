@@ -7,7 +7,7 @@ import {
   Inbox,
   Languages,
   LayoutDashboard,
-  Library,
+  FolderOpen,
   LogOut,
   MapPin,
   Menu,
@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Badge } from "./Badge";
+import { gymApi } from "../api/gym";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { setLanguage } from "../i18n";
@@ -47,7 +48,7 @@ export function Sidebar() {
       links: [
         { to: "/gym/profile", label: t("sidebar.gymProfileLink"), end: true, icon: UserCog },
         { to: "/gym/plan", label: t("sidebar.gymPlanLink"), end: true, icon: ClipboardList },
-        { to: "/gym/saved", label: t("sidebar.gymSavedLink"), end: true, icon: Library },
+        { to: "/gym/saved", label: t("sidebar.gymSavedLink"), end: true, icon: FolderOpen },
         { to: "/gym/inbox", label: t("sidebar.gymInboxLink"), end: true, icon: Inbox },
       ],
     },
@@ -55,7 +56,10 @@ export function Sidebar() {
       key: "steps",
       label: t("sidebar.steps"),
       icon: MapPin,
-      links: [{ to: "/steps", label: t("sidebar.stepsLink"), end: true, icon: MapPin }],
+      links: [
+        { to: "/steps", label: t("sidebar.stepsLink"), end: true, icon: MapPin },
+        { to: "/steps/dashboard", label: t("sidebar.stepsDashboardLink"), end: true, icon: LayoutDashboard },
+      ],
     },
     {
       key: "running",
@@ -71,6 +75,22 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem("sidebar-collapsed") === "true");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>("running");
+  const [inboxCount, setInboxCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) {
+      setInboxCount(0);
+      return;
+    }
+    const refresh = () => gymApi.inboxCount().then(setInboxCount).catch(() => {});
+    refresh();
+    const interval = setInterval(refresh, 30000);
+    window.addEventListener("inbox:changed", refresh);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("inbox:changed", refresh);
+    };
+  }, [user, location.pathname]);
 
   useEffect(() => {
     localStorage.setItem("sidebar-collapsed", String(collapsed));
@@ -141,7 +161,14 @@ export function Sidebar() {
                   sectionHasActive ? "text-blue-600 dark:text-blue-400" : "text-gray-700 dark:text-gray-300"
                 } ${isCollapsed ? "justify-center" : ""}`}
               >
-                <SectionIcon size={18} className="shrink-0" />
+                <span className="relative shrink-0">
+                  <SectionIcon size={18} />
+                  {section.key === "gym" && inboxCount > 0 && (isCollapsed || !isOpen) && (
+                    <span className="absolute -right-1.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-blue-600 px-1 text-[9px] font-semibold text-white">
+                      {inboxCount}
+                    </span>
+                  )}
+                </span>
                 {!isCollapsed && (
                   <>
                     <span className="flex-1 text-left">{section.label}</span>
@@ -176,7 +203,12 @@ export function Sidebar() {
                               className={`${linkClass(isActive, false)} !py-2 text-[13px]`}
                             >
                               <Icon size={16} className="shrink-0" />
-                              <span>{link.label}</span>
+                              <span className="flex-1">{link.label}</span>
+                              {link.to === "/gym/inbox" && inboxCount > 0 && (
+                                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-blue-600 px-1.5 text-[10px] font-semibold text-white">
+                                  {inboxCount}
+                                </span>
+                              )}
                             </NavLink>
                           );
                         })}

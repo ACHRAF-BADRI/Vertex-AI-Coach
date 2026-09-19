@@ -37,7 +37,8 @@
     "openMenu": "Ouvrir le menu",
     "openSidebar": "Ouvrir la sidebar",
     "collapseSidebar": "Réduire la sidebar",
-    "theme": "Thème"
+    "theme": "Thème",
+    "stepsDashboardLink": "Dashboard"
   },
   "auth": {
     "email": "Email",
@@ -77,7 +78,7 @@
   "home": {
     "subtitle": "Choisis un espace pour commencer.",
     "gymDescription": "Programme, nutrition et suppléments générés par IA selon ton objectif.",
-    "stepsDescription": "Suivi GPS de tes pas et de tes trajets (bientôt disponible).",
+    "stepsDescription": "Suivi GPS en direct de tes trajets, avec distance, durée et pas estimés.",
     "runningDescription": "Dashboard, journal d'entraînement et plans IA pour la course à pied."
   },
   "dashboard": {
@@ -263,11 +264,6 @@
     "declinedToast": "Message refusé",
     "conflictTitle": "Limite de sauvegardes atteinte"
   },
-  "stepsComingSoon": {
-    "title": "Compteur de pas",
-    "comingSoonTitle": "Bientôt disponible",
-    "description": "Le suivi GPS en direct (position, distance et pas en temps réel) arrive dans une prochaine mise à jour."
-  },
   "adminUsers": {
     "title": "Administration",
     "newUser": "Nouvel utilisateur",
@@ -357,7 +353,9 @@
     "daysCount_one": "{{count}} jour",
     "daysCount_other": "{{count}} jours",
     "savedGymPlans_one": "{{count}} programme sauvegardé",
-    "savedGymPlans_other": "{{count}} programmes sauvegardés"
+    "savedGymPlans_other": "{{count}} programmes sauvegardés",
+    "noStepSessions": "Aucune session GPS enregistrée.",
+    "recentStepSessions": "Sessions récentes"
   },
   "adminStats": {
     "statUsers": "Utilisateurs",
@@ -370,5 +368,48 @@
     "tooltipSignups": "Inscriptions",
     "legendUsers": "Utilisateurs",
     "legendAdmins": "Admins"
+  },
+  "stepsTracker": {
+    "title": "Compteur de pas",
+    "distance": "Distance",
+    "duration": "Durée",
+    "steps": "Pas estimés",
+    "speed": "Vitesse",
+    "start": "Démarrer",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "stop": "Terminer",
+    "hint": "Le suivi utilise le GPS de ton appareil : garde la page ouverte et l'écran allumé. Les pas sont estimés à partir de la distance et de ta taille.",
+    "waitingGps": "Recherche du signal GPS...",
+    "permissionDenied": "Autorise la localisation dans ton navigateur pour utiliser le suivi.",
+    "gpsError": "Impossible d'obtenir ta position GPS.",
+    "unsupported": "La géolocalisation n'est pas disponible sur cet appareil.",
+    "tooShort": "Session trop courte pour être enregistrée.",
+    "savedToast": "Session enregistrée",
+    "deletedToast": "Session supprimée",
+    "loadError": "Impossible de charger l'historique",
+    "history": "Historique",
+    "totalSteps": "{{count}} pas au total",
+    "emptyTitle": "Aucune session",
+    "emptyDescription": "Lance un suivi pour voir ton trajet et tes pas ici.",
+    "confirmDeleteTitle": "Supprimer cette session ?"
+  },
+  "stepsDashboard": {
+    "title": "Dashboard des pas",
+    "startTracking": "Nouvelle session",
+    "loadError": "Impossible de charger les statistiques",
+    "emptyTitle": "Aucune donnée",
+    "emptyDescription": "Enregistre une première session GPS pour voir tes statistiques ici.",
+    "totalSteps": "Pas estimés",
+    "totalDistance": "Distance totale",
+    "totalCalories": "Calories brûlées",
+    "totalTime": "Temps total",
+    "sessions": "Sessions",
+    "avgSteps": "Pas par session (moyenne)",
+    "bestSession": "Plus longue session",
+    "dailyChart": "Pas par jour (14 derniers jours)",
+    "weeklyChart": "Distance par semaine (8 dernières semaines)",
+    "stepsLabel": "Pas",
+    "distanceLabel": "Distance"
   }
 }

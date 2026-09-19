@@ -35,6 +35,7 @@ export function GymInbox() {
       await gymApi.acceptShare(share.id);
       setShares((prev) => prev.filter((s) => s.id !== share.id));
       toast.success(t("gymInbox.acceptedToast"));
+      window.dispatchEvent(new Event("inbox:changed"));
     } catch (err: any) {
       const data = err.response?.data;
       if (err.response?.status === 409 && data?.code === "limit_reached") {
@@ -54,6 +55,7 @@ export function GymInbox() {
       await gymApi.acceptShare(conflict.shareId, replaceId);
       setShares((prev) => prev.filter((s) => s.id !== conflict.shareId));
       toast.success(t("gymInbox.acceptedToast"));
+      window.dispatchEvent(new Event("inbox:changed"));
       setConflict(null);
     } catch (err: any) {
       toast.error(err.response?.data?.error ?? t("common.genericError"));
@@ -68,6 +70,7 @@ export function GymInbox() {
       await gymApi.declineShare(share.id);
       setShares((prev) => prev.filter((s) => s.id !== share.id));
       toast.success(t("gymInbox.declinedToast"));
+      window.dispatchEvent(new Event("inbox:changed"));
     } catch (err: any) {
       toast.error(err.response?.data?.error ?? t("common.genericError"));
     } finally {

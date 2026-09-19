@@ -32,6 +32,10 @@ def list_inbox(recipient_id):
     return list(_collection().find({"recipient_id": ObjectId(recipient_id)}).sort("created_at", -1))
 
 
+def count_inbox(recipient_id):
+    return _collection().count_documents({"recipient_id": ObjectId(recipient_id)})
+
+
 def get_share(recipient_id, share_id):
     try:
         return _collection().find_one({"_id": ObjectId(share_id), "recipient_id": ObjectId(recipient_id)})
