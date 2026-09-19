@@ -1,3 +1,4 @@
+import Logo from "./Logo";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronDown,
@@ -123,7 +124,7 @@ export function Sidebar() {
         onClick={closeMobile}
         className={`flex h-16 items-center gap-2 px-4 ${isCollapsed ? "justify-center px-0" : ""}`}
       >
-        <Footprints className="shrink-0 text-blue-600 dark:text-blue-400" size={24} />
+        <Logo className="shrink-0" size={28} />
         <AnimatePresence>
           {!isCollapsed && (
             <motion.span
@@ -287,7 +288,7 @@ export function Sidebar() {
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-gray-200/80 bg-white/80 px-4 backdrop-blur-md dark:border-gray-800/80 dark:bg-gray-950/80 lg:hidden">
         <Link to="/" className="flex min-w-0 items-center gap-2 text-base font-bold tracking-tight">
-          <Footprints className="shrink-0 text-blue-600 dark:text-blue-400" size={20} />
+          <Logo className="shrink-0" size={24} />
           <span className="font-display truncate bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             {t("sidebar.appName")}
           </span>
