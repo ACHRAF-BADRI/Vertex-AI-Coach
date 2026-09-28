@@ -2,7 +2,7 @@
 
 An AI-powered fitness coaching platform: a gym coach (workout program, nutrition, supplements), a running coach (training log, adaptive training plans) and a GPS step counter.
 
-**Live demo: [https://vertex-coach.pages.dev](https://vertex-coach.pages.dev)**
+**Live demo: [vertex-coach.pages.dev](https://vertex-coach.pages.dev)**
 
 > The API runs on Render's free tier, which sleeps after 15 minutes of inactivity. The first request after a pause can take about a minute.
 
