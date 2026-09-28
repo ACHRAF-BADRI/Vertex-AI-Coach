@@ -93,3 +93,12 @@ python scripts/make_admin.py your-email@example.com
   3. Environment variable: `VITE_API_URL=https://<your-service>.onrender.com/api`. This value is baked in at build time, so redeploy after changing it.
   4. Deploy, then put the Pages URL (e.g. `https://<project>.pages.dev`) in `CORS_ORIGINS` on Render.
 - MongoDB Atlas must allow connections from Render (Network Access).
+
+## License
+
+Vertex AI Coach is **source available** under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+- **Not for commercial use:** selling it, offering it as a paid or hosted service, or using it inside a company for business purposes needs a separate commercial license. Contact **ACHRAF EL BADRI** through [github.com/ACHRAF-BADRI](https://github.com/ACHRAF-BADRI).
+- Personal use, learning, and non-commercial projects are fine.
+
+Copyright (c) 2026 ACHRAF EL BADRI. Anyone sharing the code must keep the `Required Notice` line at the top of the [LICENSE](LICENSE) file.
