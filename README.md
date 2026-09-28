@@ -2,7 +2,7 @@
 
 An AI-powered fitness coaching platform: a gym coach (workout program, nutrition, supplements), a running coach (training log, adaptive training plans) and a GPS step counter.
 
-**Live demo: [https://vertex-coach.netlify.app](https://vertex-coach.netlify.app)**
+**Live demo: [https://vertex-coach.pages.dev](https://vertex-coach.pages.dev)**
 
 > The API runs on Render's free tier, which sleeps after 15 minutes of inactivity. The first request after a pause can take about a minute.
 
@@ -34,10 +34,10 @@ An AI-powered fitness coaching platform: a gym coach (workout program, nutrition
 
 ```
 AI-Running-Coach/
-├── api/         # Flask API: auth, activities, AI plans, gym coach, steps, admin
-├── web/         # React + TypeScript application
-├── render.yaml  # Render blueprint for the API
-└── netlify.toml # Netlify build configuration for the frontend
+├── api/                    # Flask API: auth, activities, AI plans, gym coach, steps, admin
+├── web/                    # React + TypeScript application (Cloudflare Pages)
+│   └── public/_redirects   # SPA fallback so client-side routes work on Cloudflare Pages
+└── render.yaml             # Render blueprint for the API
 ```
 
 ## Tech stack
@@ -51,7 +51,7 @@ AI-Running-Coach/
 - **API**: Python (Flask), JWT (`flask-jwt-extended`), BCrypt, MongoDB (`pymongo`), Groq API (free tier) for AI generation
 - **Web**: React + TypeScript (Vite), Tailwind CSS, React Router, Recharts, Framer Motion, react-i18next
 - **Database**: MongoDB Atlas
-- **Deployment**: Render (`api/`, Docker + gunicorn) and Netlify (`web/`), continuous deployment on GitHub push
+- **Deployment**: Render (`api/`, Docker + gunicorn) and Cloudflare Pages (`web/`), continuous deployment on GitHub push
 
 ## Running locally
 
@@ -87,5 +87,9 @@ python scripts/make_admin.py your-email@example.com
 ## Deployment
 
 - **API (Render)**: create a Blueprint from this repository (it reads `render.yaml`) and set `MONGODB_URI`, `JWT_SECRET_KEY`, `GROQ_API_KEY` and `CORS_ORIGINS` (the frontend URL, without a trailing slash).
-- **Web (Netlify)**: import the repository (it reads `netlify.toml`) and set `VITE_API_URL` to the API URL followed by `/api`. This value is baked in at build time, so redeploy after changing it.
+- **Web (Cloudflare Pages)**:
+  1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → select this repo.
+  2. Build settings: framework preset **Vite**, root directory **`web`**, build command **`npm run build`**, output directory **`dist`**.
+  3. Environment variable: `VITE_API_URL=https://<your-service>.onrender.com/api`. This value is baked in at build time, so redeploy after changing it.
+  4. Deploy, then put the Pages URL (e.g. `https://<project>.pages.dev`) in `CORS_ORIGINS` on Render.
 - MongoDB Atlas must allow connections from Render (Network Access).
