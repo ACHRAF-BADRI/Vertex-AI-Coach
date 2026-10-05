@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { LanguageToggle } from "../components/LanguageToggle";
 import { PasswordInput } from "../components/PasswordInput";
+import { Spinner } from "../components/Spinner";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { useAuth } from "../context/AuthContext";
 
@@ -100,9 +101,7 @@ export function Login() {
           )}
 
           <button type="submit" disabled={submitting} className="btn-primary mt-1 w-full">
-            {submitting && (
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-            )}
+            {submitting && <Spinner />}
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
         </form>

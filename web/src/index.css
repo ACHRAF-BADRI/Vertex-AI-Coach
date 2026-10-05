@@ -73,3 +73,33 @@ body {
     transform: scaleX(1);
   }
 }
+
+/* Spinner: the SVG rotates while the arc grows and shrinks. Drawn with strokes
+   so it isn't affected by the global border colour rule above. */
+.spinner {
+  animation: spinner-rotate 1.4s linear infinite;
+}
+.spinner-arc {
+  stroke-dasharray: 1 68;
+  stroke-dashoffset: 0;
+  animation: spinner-dash 1.4s ease-in-out infinite;
+}
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner-dash {
+  0% {
+    stroke-dasharray: 1 68;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 40 68;
+    stroke-dashoffset: -16;
+  }
+  100% {
+    stroke-dasharray: 40 68;
+    stroke-dashoffset: -56;
+  }
+}
